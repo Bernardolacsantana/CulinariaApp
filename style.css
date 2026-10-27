@@ -1,0 +1,44 @@
+.nome{
+    text-align: center;
+    color: rgb(119, 4, 4);
+    font-size:50px;
+}
+.logo{
+    text-align: center;
+    color:black;
+}
+.divMae{
+    height: 100vh;
+    height: 100%;
+    background-color: rgb(68, 67, 67);
+}
+
+.teclas{
+    display: flex;
+    flex-direction: row;
+  
+}
+
+.b1{
+    color:antiquewhite;
+    background-color: brown;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+    height: 50px;
+
+    align-items: center;
+    justify-content: center;
+}
+.b2{
+    color: antiquewhite;
+    background-color: black;
+    border-radius: 10px;
+    text-align: center;
+   
+    width: 200px;
+    height: 50px;
+
+    align-items: center;
+    justify-content: center;
+}
