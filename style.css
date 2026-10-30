@@ -6,6 +6,7 @@
     font-weight: 900;
     text-decoration: underline;
 }
+/*Frese de duas cores*/
 .subParte1{
     text-align: left;
     color:rgb(2, 32, 10);
@@ -14,6 +15,7 @@
 
     font-family: Helvetica, Arial, sans-serif;
 }
+
 .subParte2{
     text-align: left;
     color: rgba(221, 71, 1, 0.877);
@@ -23,27 +25,69 @@
 
     font-family: 'Times New Roman', Times, serif;
 }
+/*Cria a cor de fundo*/
 .divMae{
     height: 100vh;
     height: 100%;
     background-color: rgb(247, 255, 212);
 }
-
 .container{
     display: flex;
-    gap: 10px;
-    background-color: white;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px;
+}
 
-    h3{
-        color:rgb(0, 44, 6);
-        text-align: center;
-        background-color: rgb(247, 255, 212);
-        border: 2px solid;
-        border-radius: 10px;
-        border-color: rgb(247, 255, 212);
-        padding: 15px;
-        
-        text-align: center;
-    }
-    
+/*Esconde o padrão do checkbox*/
+.container input[type="checkbox"]{
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.container label span{
+    display: inline-block;
+    color: rgb(0, 44, 6);
+
+    text-align: center;
+
+    /*Formatação dos botões*/
+    background-color: rgb(247, 255, 212);
+    border: 2px solid rgb(247, 255, 212);
+    border-radius: 10px;
+    padding: 15px;
+
+    cursor: pointer;
+
+    font-weight:bold;
+    font-size: 1.73em;
+    transition: all 0.2s ease;
+
+    user-select: none;
+
+}
+
+/*Efeitos visuais de seleção do ingrediente*/
+.container input[type="checkbox"]:checked+span{
+    background-color: rgb(119, 4, 4);
+    color: white;
+    border-color: rgb(119, 4, 4);
+}
+
+.btnEnviar{
+    display: block;
+    margin: 20px auto;
+    padding: 12px 30px;
+    background-color: rgb(2, 32, 10);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.btnEnviar:hover{
+    background-color: rgb(119, 4, 4);
 }

@@ -23,44 +23,41 @@
             <h1 class = "expositorio">
                 Ingredientes disponíveis
             </h1>
-            <div class = "container">
-                <h3>
-                    Arroz
-                </h3>
-                <h3>
-                    Tomate
-                </h3>
-                <h3>
-                    Ovos
-                </h3>
-                <h3>
-                    Cebola
-                </h3>
-                <h3>
-                    Alho
-                </h3>
-                <h3>
-                    Azeite
-                </h3>
-                <h3>
-                    Frango
-                </h3>
-                <h3>
-                    Batata
-                </h3>
-                <h3>
-                    Queijo
-                </h3>
-                <h3>
-                    Sal
-                </h3>
-                <h3>
-                    Macarrão
-                </h3>
-                <h3>
-                    Atum
-                </h3>
-            </div>
+            <!-- O que faz a mágica acontecer -->
+            <form action="http://localhost:8080/buscar" method="get">
+                <!--Criação de formulários-->
+                <div class = "container">
+                    <label>
+                        <input type="checbox" neme="ingredientes" value="arroz"><span>
+                            Arroz
+                        </span>
+                    </label>
+                    <label>
+                        <input type="checbox" neme="ingredientes" value="tomate"><span>
+                            Tomate
+                        </span>
+                    </label>
+                    <label>
+                        <input type="checbox" neme="ingredientes" value="sal"><span>
+                            Sal
+                        </span>
+                    </label>
+                    <label>
+                        <input type="checbox" neme="ingredientes" value="ovos"><span>
+                            Ovos
+                        </span>
+                    </label>
+                    <label>
+                        <input type="checbox" neme="ingredientes" value="Atum"><span>
+                            Atum
+                        </span>
+                    </label>
+                </div>
+                <button type="submit" class="btnEnviar">
+                    Buscar Receitas
+                </button>
+            </form>
+
             <div class = "divSecundaria">
                 <h5 class="pequenoTitulo">
                     FEITAS PARA VOCÊ
@@ -74,6 +71,7 @@
                 <div class = "exibirReceitas">
 
                 </div>
+            
             </div>
         </div>
     </div>  
