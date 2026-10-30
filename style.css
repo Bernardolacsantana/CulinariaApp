@@ -1,44 +1,49 @@
-.nome{
+.titulo{
     text-align: center;
     color: rgb(119, 4, 4);
+    
     font-size:50px;
+    font-weight: 900;
+    text-decoration: underline;
 }
-.logo{
-    text-align: center;
-    color:black;
+.subParte1{
+    text-align: left;
+    color:rgb(2, 32, 10);
+    font-size:63px;
+    margin-bottom: 0;
+
+    font-family: Helvetica, Arial, sans-serif;
+}
+.subParte2{
+    text-align: left;
+    color: rgba(221, 71, 1, 0.877);
+    
+    font-size:60px;
+    margin-top: 0;
+
+    font-family: 'Times New Roman', Times, serif;
 }
 .divMae{
     height: 100vh;
     height: 100%;
-    background-color: rgb(68, 67, 67);
+    background-color: rgb(247, 255, 212);
 }
 
-.teclas{
+.container{
     display: flex;
-    flex-direction: row;
-  
-}
+    gap: 10px;
+    background-color: white;
 
-.b1{
-    color:antiquewhite;
-    background-color: brown;
-    border-radius: 10px;
-    text-align: center;
-    width: 200px;
-    height: 50px;
-
-    align-items: center;
-    justify-content: center;
-}
-.b2{
-    color: antiquewhite;
-    background-color: black;
-    border-radius: 10px;
-    text-align: center;
-   
-    width: 200px;
-    height: 50px;
-
-    align-items: center;
-    justify-content: center;
+    h3{
+        color:rgb(0, 44, 6);
+        text-align: center;
+        background-color: rgb(247, 255, 212);
+        border: 2px solid;
+        border-radius: 10px;
+        border-color: rgb(247, 255, 212);
+        padding: 15px;
+        
+        text-align: center;
+    }
+    
 }
