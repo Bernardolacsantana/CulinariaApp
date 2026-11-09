@@ -12,14 +12,16 @@ import java.util.*;
 class Receita{
     String nome;
     ArrayList<String> ingredientes;
+    String urlImagem;
 
-    public Receita(String nome){
+    public Receita(String nome, String urlImagem){
         this.nome = nome;
+        this.urlImagem = urlImagem;
         this.ingredientes = new ArrayList<>();
     }
     //Funçaõ p/ adicionar os ingredientes
     public void addingrediente(String ingrediente){
-        this.ingredientes.add(ingrediente.toLowerCase().trim());
+        this.ingredientes.add(ingrediente.trim().toLowerCase());
     }
 }
 
@@ -31,13 +33,13 @@ public class assets {
     public static void main(String[] args) throws IOException{
                         
         //Cadastro de receitas:
-        Receita A1 = new Receita("Omelete");
+        Receita A1 = new Receita("Omelete", "https//unsplash.com");
         A1.addingrediente("ovos");
         A1.addingrediente("sal");
         A1.addingrediente("queijo");
         livroDeReceitas.add(A1);
 
-        Receita A2 = new Receita("Macarrão À Bolonhesa");
+        Receita A2 = new Receita("Macarrão À Bolonhesa", "https//unsplash.com");
         A2.addingrediente("macarrao");
         A2.addingrediente("alho");
         A2.addingrediente("azeite");
@@ -46,7 +48,7 @@ public class assets {
         A2.addingrediente("carne moida");
         livroDeReceitas.add(A2);
 
-        Receita A3 = new Receita("Salada de Atum");
+        Receita A3 = new Receita("Salada de Atum", "https//unsplash.com");
         A3.addingrediente("atum");
         A3.addingrediente("tomate");
         A3.addingrediente("sal");
@@ -98,6 +100,39 @@ public class assets {
             os.write(bytes);
         }
     }
+
+    //Cadastro de usuário
+    static class UsuarioHandler implements HttpHandler{
+        @Override
+        public void handle(HttpExchange exchange) throws IOException{
+            Map<String, List<String>> params = lerParametros(exchange.getRequestURI().getQuery());
+            if(params.containsKey("nome") && params.containsKey("email")){
+                usuarioCadastrado.put("nome", params.get("nome").get(0));
+                usuarioCadastrado.get("email", params.get("email").get(0));
+                System.out.println("Conexão completa, usuário " + usuarioCadastrado.get("nome") + " definido");
+                enviarResposta(exchange, "Bem-vindo", + usuárioCadastrado.get("nome") + "!");
+            }
+            else{
+                enviarResposta(exchange, "Erro ao processar cadastro.");
+            }
+        }
+    }
+
+    //Imagens nas receitas
+    static class SugestõesHandler implements HttpHandler{
+        @Override
+        public void handle(HttpExchange exchange) throws IOException{
+            StringBuilder html = new StringBuilder();
+            for(Receita v : livroDeReceitas){
+                html.append("<div class='cardReceita'>")
+                    .append("<img src='").append(v.urlImagem).append("' alt='Imagem da receita' class='imgReceita'>")
+                    .append("<h3>").append(v.nome).append("</h3>")
+                    .append("<p><b>Ingredientes:</b>").append(String.join(", ", v.ingredientes)).append("</p>")
+                    .append("</div>");
+            }
+            enviarResposta(exchange, html.toString());
+        }
+    }
     
     //Rota 1: Lista de receitas cadastradas como sugestão
     static class SugestoesHandler implements HttpHandler{
@@ -127,15 +162,23 @@ public class assets {
                 String nomeBruto = params.get("nome").get(0);
                 String nomeFormatado = nomeBruto.substring(0, 1).toUpperCase() + nomeBruto.substring(1);
 
-                Receita nova = new Receita(nomeFormatado);
+                String img =params.containsKey("imagem") && !params.get("imagem").get(0).isEmpty()
+                    ? params.get("imagem").get(0)
+                    : "https://unsplash.com";
+                
+                Receita nova = new Receita(nomeFormatado, img);
                 for(String ing : params.get("ingredientes").get(0).split(",")){
                     if(!ing.trim().isEmpty()){
-                        nova.addingrediente(ing);
+                        nova.addingrediente(ing != null ? ing : ing);
                     }
                 }
                 livroDeReceitas.add(nova);
+                enviarResposta(exchange, "Receita cadastrada com sucesso!");
             }
-            enviarResposta(exchange, "Receita cadastrada com sucesso!");
+            else{
+                enviarResposta(exchange, "Dados incompletos");
+            }
+            
         }
     }
 

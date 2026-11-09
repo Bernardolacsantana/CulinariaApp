@@ -7,33 +7,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!--Tela de cadastro-->
-    <div id="telaCadastro" class="telaInicial">
-        <div class="boxCadastro">
+    <!--Tela de cadastro do usuário no primeiro acesso-->
+    <div id="cadastroUsuario" class="primeiraInt">
+        <div class="caixaCadastro">
             <h1 class="titulo">
                 Direto do Forno
             </h1>
+            <h2>
+                Seja bem-vindo(a)!
+            </h2>
             <p>
-                Antes de abrir sua despens, deseja cadastrar alguma nova receita no sistema?
+                Faça seu cadastro para começar a cozinhar!
             </p>
-            <form id="formulárioDeCadstro">
-                <input type="text" id="nomeReceita" placeholder="Nome da Receita(Ex: Salpicão)" required>
-                <input type="text" id="IngReceita" placeholder="Ingredientes necessários (Ex: arroz, ovos, sal)" required>
+            <form id="formUsuario">
+                <input type="text" id="nomeUser" placeholder="Insira seu nome" required>
+                <input type="email" id="emailUser" placeholder="E-mail" required>
                 <button type="submit" class="btnEnviar">
-                    Cadastrar Receita
+                    Comece a cozinhar!
                 </button>
             </form>
-
-            <hr>
-            <button type="button" class="btnSecundario" onclick="abrirAplicativo()">
-                Comece a cozinhar
-            </button>
         </div>
     </div>
+
 
     <!--Tela do App Principal-->
     <div id="telaApp" class="divMae" style="display: none;">
         <div class = "cabeçalho">
+            <div class="usuárioInfo" id="boasVindasUser">
+
+            </div>
             <h1 class = "titulo">
                 Direto do Forno
             </h1>
@@ -46,11 +48,23 @@
         </div>
 
         <div class = "divExpositorio">
+            
+            <div>
+                <div class="topoDaDespensa">
+                    <h1 class="expositorio">
+                        Ingredientes disponíveis
+                    </h1>
+                    <button class="bntNovaReceita" onclick="abrirModal()">
+                        + Cadastrar nova receita
+                    </button>
+                </div>
+            </div>
+
             <h1 class = "expositorio">
                 Ingredientes disponíveis
             </h1>
             <!-- O que faz a mágica acontecer -->
-            <form action="http://localhost:8080/buscar" method="get">
+            <form id="formBusca" action="http://localhost:8080/buscar" method="get">
                 <!--Criação de formulários-->
                 <div class = "container">
                     <label>
@@ -93,9 +107,7 @@
                         Ver sugestões
                     </button>
                 </div>
-
-
-                
+ 
             </form>
 
             <div class = "divSecundaria">
