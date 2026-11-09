@@ -7,7 +7,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="divMae">
+    <!--Tela de cadastro-->
+    <div id="telaCadastro" class="telaInicial">
+        <div class="boxCadastro">
+            <h1 class="titulo">
+                Direto do FOrno
+            </h1>
+            <p>
+                Antes de abrir sua despens, deseja cadastrar alguma nova receita no sistema?
+            </p>
+            <form id="formulárioDeCadstro">
+                <input type="text" id="nomeReceita" placeholder="Nome da Receita(Ex: Salpicão)" required>
+                <input type="text" id="IngReceita" placeholder="Ingredientes necessários (Ex: arroz, ovos, sal)" required>
+                <button type="submit" class="btnEnviar">
+                    Cadastrar Receita
+                </button>
+            </form>
+
+            <hr>
+            <button type="button" class="btnSecundario" onclick="abrirAplicativo()">
+                Comece a cozinhar
+            </button>
+        </div>
+    </div>
+
+    <!--Tela do App Principal-->
+    <div id="telaApp" class="divMae" style="display: none;">
         <div class = "cabeçalho">
             <h1 class = "titulo">
                 Direto do Forno
@@ -19,6 +44,7 @@
                 novas possibilidades
             </h2>
         </div>
+
         <div class = "divExpositorio">
             <h1 class = "expositorio">
                 Ingredientes disponíveis
@@ -28,53 +54,120 @@
                 <!--Criação de formulários-->
                 <div class = "container">
                     <label>
-                        <input type="checbox" neme="ingredientes" value="arroz"><span>
+                        <input type="checkbox" name="ingredientes" value="arroz"><span>
                             Arroz
                         </span>
                     </label>
                     <label>
-                        <input type="checbox" neme="ingredientes" value="tomate"><span>
+                        <input type="checkbox" name="ingredientes" value="tomate"><span>
                             Tomate
                         </span>
                     </label>
                     <label>
-                        <input type="checbox" neme="ingredientes" value="sal"><span>
+                        <input type="checkbox" name="ingredientes" value="sal"><span>
                             Sal
                         </span>
                     </label>
                     <label>
-                        <input type="checbox" neme="ingredientes" value="ovos"><span>
+                        <input type="checkbox" name="ingredientes" value="ovos"><span>
                             Ovos
                         </span>
                     </label>
                     <label>
-                        <input type="checbox" neme="ingredientes" value="Atum"><span>
+                        <input type="checkbox" name="ingredientes" value="Atum"><span>
                             Atum
                         </span>
                     </label>
+                    <label>
+                        <input type="checkbox" name="ingredientes" value="Queijo"><span>
+                            Queijo
+                        </span>
+                    </label>
                 </div>
-                <button type="submit" class="btnEnviar">
+
+                <div class="busca">
+                    <button type="submit" class="btnEnviar">
                     Buscar Receitas
-                </button>
+                    </button>
+                    <button type="button" class="btnLimpar" onclick="carregarSugestões()">
+                        Ver sugestões
+                    </button>
+                </div>
+
+
+                
             </form>
 
             <div class = "divSecundaria">
                 <h5 class="pequenoTitulo">
                     FEITAS PARA VOCÊ
                 </h5>
-                <h1 class = "receitaMae">
+                <h1 id="tituloResultados" class = "receitaMae">
                     Receitas que Combinam
                 </h1>
-                <h5 class="pequenoTituloP2">
+                <h5 id="subtituloResultados" class="pequenoTituloP2">
                     Sugestões baseadas em seus ingredientes
                 </h5>
-                <div class = "exibirReceitas">
 
+                <div id="exibirReceitas" class = "exibirReceitas">
+                    Carregando receitas do servidor Java. . .
                 </div>
             
             </div>
         </div>
     </div>  
-   
+
+    <!--Script para conectar ao Java sem recarregar a página web-->
+    <script>
+        document.getElementById("formCadastro").addEventListener("submit", function(e){
+            e.preventDefault();
+            const none = document.getElementById("nomeReceita").value;
+            const ingredientes = document.getElementById("ingReceita").value;
+
+            fetch('http://localhost:8080/cadastrar?nome=${encodeURIComponent(nome)}&ingredientes=$ingredientes=${encodeURIComponent(ingredientes)}')
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg);
+                    documento.gerElementById("formCadastro").reset();
+                })
+                .catch(() => alert("Erro ao conectar com o servidor Java. Verifique a conexão!"));
+        });
+
+        function abrirAplicativo(){
+            document.getElementById("telaCadastro").style.display = "none";
+            document.getElementById("telaApp").style.display = "block";
+            carregarSugestões();
+        }
+
+        <!--Buscador de receitas-->
+        function carregarSugestões(){
+            document.getElementById("tituloResultados").innertext = "Sugestões Cadastradas";
+            document.getElementById("subtituloResultados").innerText = "Todas as receitas disponíveis no sistema";
+            fetch("http://localhost:8080/sugestões")
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById("exibirReceitas").innerHTML = html;
+                });
+        }
+
+        document.getElementById("formBusca").addEventListener("submit", function(e){
+            e.preventDefault();
+            const marcados = document.querySelectorAll('input[name="ingredientes"]:checked');
+            const params = new URLSearchParams();
+
+            marcados.forEach(item => params.append("ingredientes", item.value));
+
+            document.getElementById("tituloResultados").innerText = "Receitas que Combinam";
+            document.getElementById("SubtitulosResultados").innerText = "Sugestões baseadas nos ingredientes marcados";
+
+            fetch('http://localhost:8080/buscar?${params.toString()}')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById("exibirReceitas").innerHTML = html;
+                });
+        });
+
+    </script>
+
 </body>
 </html>

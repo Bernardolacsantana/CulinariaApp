@@ -1,3 +1,9 @@
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(247, 255, 212);
+}
+
 .titulo{
     text-align: center;
     color: rgb(119, 4, 4);
@@ -6,6 +12,7 @@
     font-weight: 900;
     text-decoration: underline;
 }
+
 /*Frese de duas cores*/
 .subParte1{
     text-align: left;
@@ -25,18 +32,66 @@
 
     font-family: 'Times New Roman', Times, serif;
 }
+
 /*Cria a cor de fundo*/
 .divMae{
-    height: 100vh;
-    height: 100%;
+    min-height: 100vh;
+    min-height: 100%;
     background-color: rgb(247, 255, 212);
+    padding-bottom: 40px;
 }
+
+.telaInicial{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.boxCadastro{
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+
+.boxCadastro input{
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid rgb(2, 32, 10);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.btnSecundario{
+    margin-top: 15px;
+    padding: 12px 25px;
+    background-color: rgba(221, 71, 1, 0.877);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.expositorio, .divSecundaria{
+    padding: 0 20px;
+}
+
 .container{
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+    background-color: white;
     justify-content: center;
     padding: 20px;
+    border-radius: 12px;
 }
 
 /*Esconde o padrão do checkbox*/
@@ -76,18 +131,55 @@
     border-color: rgb(119, 4, 4);
 }
 
-.btnEnviar{
+.busca {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.btnEnviar, .btnLimpar{
     display: block;
     margin: 20px auto;
     padding: 12px 30px;
     background-color: rgb(2, 32, 10);
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     border: none;
     border-radius: 8px;
     cursor: pointer;
 }
+
+.bntLimpar{
+    background-color: rgb(119, 4, 4);
+}
+
 .btnEnviar:hover{
     background-color: rgb(119, 4, 4);
+}
+
+.exibirReceitas{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.cardReceita{
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 6px solid rgba(221, 71, 1, 0.877);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cardReceita.sucesso{
+    border-left-color: #2e7d32;
+    background-color: #f1f8e9;
+}
+
+.cardReceita h3{
+    margin-top: 0;
+    color: rgb(2, 32, 10);
 }

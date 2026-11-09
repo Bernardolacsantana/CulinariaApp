@@ -2,15 +2,11 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
-
 import java.nio.charset.StandardCharsets;
-
 import java.util.*;
 
 class Receita{
@@ -23,21 +19,20 @@ class Receita{
     }
     //Funçaõ p/ adicionar os ingredientes
     public void addingrediente(String ingrediente){
-        this.ingredientes.add(ingrediente.toLowerCase());
+        this.ingredientes.add(ingrediente.toLowerCase().trim());
     }
 }
 
 public class assets {
 
-    static ArrayList<String> cardapio = new ArrayList<>();
     static ArrayList<Receita> livroDeReceitas = new ArrayList<>();
 
 
     public static void main(String[] args) throws IOException{
                         
-            //Cadastro de receitas:
+        //Cadastro de receitas:
         Receita A1 = new Receita("Omelete");
-        A1.addingrediente("ovo");
+        A1.addingrediente("ovos");
         A1.addingrediente("sal");
         A1.addingrediente("queijo");
         livroDeReceitas.add(A1);
@@ -51,74 +46,125 @@ public class assets {
         A2.addingrediente("carne moida");
         livroDeReceitas.add(A2);
 
+        Receita A3 = new Receita("Salada de Atum");
+        A3.addingrediente("atum");
+        A3.addingrediente("tomate");
+        A3.addingrediente("sal");
+        livroDeReceitas.add(A3);
+
         //Servidor HTTP nativo na porta 8080
         HttpServer servidor = HttpServer.create(new InetSocketAddress(8080), 0);
         
-        servidor.createContext("/busca", new BuscarHandler());
+        //Rota de busca para receitas
+        servidor.createContext("/buscar", new BuscarHandler());
+
+        //Rota para exibir as sugestões enviando para exibirReceitas
+
+        servidor.createContext("/sugestoes", new SugestoesHandler());
+
+        //Rota para receber e salvar nova receita
+
+        servidor.createContext("/cadastrar", new CadastrarHandler());
 
         servidor.setExecutor(null);
         System.out.println("Servidor Java Ativo! Porta 8080 conectada");
         //ponto de partida
         servidor.start();
-
     }
 
+    //Extração de parâmetros da URL
+    static Map<String, List<String>> lerParametros(String query) throws IOException{
+        Map<String, List<String>> mapa = new HashMap<>();
+        if(query != null){
+            for(String par:query.split("&")){
+                String[] kv = par.split("=");
+                if(kv.length>1){
+                    String chave = URLDecoder.decode(kv[0], StandardCharsets.UTF_8.name());
+                    String valor = URLDecoder.decode(kv[1], StandardCharsets.UTF_8.name()).toLowerCase().trim();
+                    mapa.computeIfAbsent(chave, k -> new ArrayList<>()).add(valor);
+                }
+            }
+        }
+        return mapa;
+    }
+
+    //Envio de resposta HTML e limpeza do navegador
+    static void enviarResposta(HttpExchange exchange, String html) throws IOException{
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
+        byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(200, bytes.length);
+        try(OutputStream os = exchange.getResponseBody()){
+            os.write(bytes);
+        }
+    }
+    
+    //Rota 1: Lista de receitas cadastradas como sugestão
+    static class SugestoesHandler implements HttpHandler{
+        @Override
+        public void handle(HttpExchange exchange) throws IOException{
+            StringBuilder html = new StringBuilder();
+            for(Receita v: livroDeReceitas){
+                html.append("<div class='cardReceita'>")
+                    .append("<h3>").append(v.nome).append("</h3>")
+                    .append("<p><b>Ingredientes:</b>").append(String.join(", ", v.ingredientes)).append("</p>")
+                    .append("</div>");
+            }
+            enviarResposta(exchange, html.toString());
+        }
+    }
+
+    //Rota 2: Cadastro de nova receita
+    static class CadastrarHandler implements HttpHandler{
+        @Override
+        public void handle(HttpExchange exchange) throws IOException{
+            Map<String, List<String>> params = lerParametros(exchange.getRequestURI().getQuery());
+            if(params.containsKey("nome") && params.containsKey("ingredientes")){
+                String nomeBruto = params.get("nome").get(0);
+                String nomeFormatado = nomeBruto.substring(0, 1).toUpperCase() + nomeBruto.substring(1);
+
+                Receita nova = new Receita(nomeFormatado);
+                for(String ing : params.get("ingredientes").get(0).split(",")){
+                    if(!ing.trim().isEmpty()){
+                        nova.addingrediente(ing);
+                    }
+                }
+                livroDeReceitas.add(nova);
+            }
+            enviarResposta(exchange, "Receita cadastrada com sucesso!");
+        }
+    }
+
+    //Rota 3: COmparação de receitas cadastradas com dados inseridos
     static class BuscarHandler implements HttpHandler{
         @Override
         public void handle(HttpExchange exchange) throws IOException{
-            //Responsável pelo acesso
-            exchange.getResponseHeaders().add("Access-Control-Allow-Origin","*");
-            
-            String query = exchange.getRequestURI().getQuery();
-            List<String> ingredientesUsuario = new ArrayList<>();
+            Map<String, List<String>> params = lerParametros(exchange.getRequestURI().getQuery());
+            List<String> ingredientesUsuario = params.getOrDefault("ingredientes", new ArrayList<>());
 
-            if (query != null){
-                String[] pares = query.split("&");
-                for (String par:pares){
-                    String[] chaveValor = par.split("=");
-                    if(chaveValor.length > 1 && chaveValor [0].equals("ingredientes")){
-                        String ingrediente = URLDecoder.decode(chaveValor[1], StandardCharsets.UTF_8.toString()).toLowerCase();
-                        ingredientesUsuario.add(ingrediente);
-                    }
-                }
-            }
-            //Comparador
-            StringBuilder respostaHtml = new StringBuilder();
-            respostaHtml.append("<html><head><meta charset='UTF-8></head><body style='font-family:Arial; padding: 20px; backgrond-color: #f7ffd4;'>");
-            respostaHtml.append("<h2 style='color: rgb(119, 4, 4);'>Direto do Forno - Resultado da Busca</h2");
-            respostaHtml.append("<p>Com os ingredientes selecionados: <b>").append(ingredientesUsuario).append("</b></p>");
-
+            StringBuilder html = new StringBuilder();
             boolean encontrouAlguma = false;
-
+            
             for(Receita receita: livroDeReceitas){
-                int ingredientesEncontrados = 0;
-
-                for (String ingredienteNecessario : receita.ingredientes){
-                    if (ingredientesUsuario.contains(ingredienteNecessario)) {
-                        ingredientesEncontrados++;
+                int encontrados = 0;
+                for(String ing : receita.ingredientes){
+                    if(ingredientesUsuario.contains(ing)){
+                        encontrados++;
                     }
                 }
-                if (ingredientesEncontrados == receita.ingredientes.size()){
-                respostaHtml.append("<li style='font-size:18px; color: green; margin-bottom: 8px;<b> Receita encontrada</b> Pode fazer").append(receita.nome).append("</li>");
-                encontrouAlguma = true;
+                if(encontrados == receita.ingredientes.size()){
+                    html.append("<div class='cardReceita sucesso'>")
+                        .append("<h3>").append(receita.nome).append("</h3>")
+                        .append("<p>Você tem tosdos os ingredientes necessários!</p>")
+                        .append("</div>");
+                    encontrouAlguma = true;
                 }
             }
-            
-
-            if (!encontrouAlguma){
-                respostaHtml.append("<li style='font-size: 16px; color: #555'>Poxa, você tem ingredientes suficientes para nenhuma receita cadastrada.</li>");
+            if(!encontrouAlguma){
+                html.append("<p class = 'avisoVazio'> Nenhuma receita encontrada com os ingredintes que você selecionados. Tente marcar mais opções.</p>");
             }
-            respostaHtml.append("</ul><br><a href ='javascript:history.back()' style='background: rgb(2, 32, 10); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Voltar para a Denspensa</a></body></html>");
 
-            byte[] bytesResposta = respostaHtml.toString().getBytes(StandardCharsets.UTF_8);
-            exchange.sendResponseHeaders(200, bytesResposta.length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(bytesResposta);
-            os.close();
-        } 
-        
+            enviarResposta(exchange, html.toString());
+        }
     }
-      
-}
-
-
+}    
