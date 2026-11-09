@@ -78,7 +78,7 @@ public class assets {
         if(query != null){
             for(String par:query.split("&")){
                 String[] kv = par.split("=");
-                if(kv.length>1){
+                if(kv.length > 1){
                     String chave = URLDecoder.decode(kv[0], StandardCharsets.UTF_8.name());
                     String valor = URLDecoder.decode(kv[1], StandardCharsets.UTF_8.name()).toLowerCase().trim();
                     mapa.computeIfAbsent(chave, k -> new ArrayList<>()).add(valor);
@@ -103,6 +103,10 @@ public class assets {
     static class SugestoesHandler implements HttpHandler{
         @Override
         public void handle(HttpExchange exchange) throws IOException{
+
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
             StringBuilder html = new StringBuilder();
             for(Receita v: livroDeReceitas){
                 html.append("<div class='cardReceita'>")
@@ -139,6 +143,10 @@ public class assets {
     static class BuscarHandler implements HttpHandler{
         @Override
         public void handle(HttpExchange exchange) throws IOException{
+
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
             Map<String, List<String>> params = lerParametros(exchange.getRequestURI().getQuery());
             List<String> ingredientesUsuario = params.getOrDefault("ingredientes", new ArrayList<>());
 
