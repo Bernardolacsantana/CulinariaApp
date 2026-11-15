@@ -7,179 +7,146 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!--Tela de cadastro do usuário no primeiro acesso-->
-    <div id="cadastroUsuario" class="primeiraInt">
-        <div class="caixaCadastro">
-            <h1 class="titulo">
-                Direto do Forno
-            </h1>
-            <h2>
-                Seja bem-vindo(a)!
-            </h2>
-            <p>
-                Faça seu cadastro para começar a cozinhar!
-            </p>
+
+    <!-- TELA 1: CADASTRO DE USUÁRIO (PRIMEIRO ACESSO) -->
+    <div id="telaUsuario" class="telaInicial">
+        <div class="boxCadastro">
+            <h1 class="titulo">Direto do Forno</h1>
+            <h2>Seja bem-vindo(a)!</h2>
+            <p>Faça seu cadastro para acessar sua cozinha inteligente:</p>
             <form id="formUsuario">
-                <input type="text" id="nomeUser" placeholder="Insira seu nome" required>
-                <input type="email" id="emailUser" placeholder="E-mail" required>
-                <button type="submit" class="btnEnviar">
-                    Comece a cozinhar!
-                </button>
+                <input type="text" id="nomeUser" placeholder="Seu Nome" required>
+                <input type="email" id="emailUser" placeholder="Seu E-mail" required>
+                <button type="submit" class="btnEnviar">Entrar no Aplicativo</button>
             </form>
         </div>
     </div>
 
-
-    <!--Tela do App Principal-->
+    <!-- TELA 2: APLICATIVO PRINCIPAL (ESCONDIDO NO INÍCIO) -->
     <div id="telaApp" class="divMae" style="display: none;">
-        <div class = "cabeçalho">
-            <div class="usuárioInfo" id="boasVindasUser">
-
-            </div>
-            <h1 class = "titulo">
-                Direto do Forno
-            </h1>
-            <h2 class = "subParte1">
-                Sua despensa,
-            </h2>
-            <h2 class = "subParte2">
-                novas possibilidades
-            </h2>
+        <div class="cabeçalho">
+            <div class="usuarioInfo" id="boasVindasUser"></div>
+            <h1 class="titulo">Direto do Forno</h1>
+            <h2 class="subParte1">Sua despensa,</h2>
+            <h2 class="subParte2">novas possibilidades</h2>
         </div>
 
-        <div class = "divExpositorio">
-            
-            <div>
-                <div class="topoDaDespensa">
-                    <h1 class="expositorio">
-                        Ingredientes disponíveis
-                    </h1>
-                    <button class="bntNovaReceita" onclick="abrirModal()">
-                        + Cadastrar nova receita
-                    </button>
-                </div>
+        <div class="divExpositorio">
+            <div class="topoDespensa">
+                <h1 class="expositorio">Ingredientes disponíveis</h1>
+                <!-- Botão para abrir o painel de cadastro de receitas -->
+                <button class="btnNovaReceita" onclick="abrirModal()">+ Cadastrar Nova Receita</button>
             </div>
-
-            <h1 class = "expositorio">
-                Ingredientes disponíveis
-            </h1>
-            <!-- O que faz a mágica acontecer -->
-            <form id="formBusca" action="http://localhost:8080/buscar" method="get">
-                <!--Criação de formulários-->
-                <div class = "container">
-                    <label>
-                        <input type="checkbox" name="ingredientes" value="arroz"><span>
-                            Arroz
-                        </span>
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ingredientes" value="tomate"><span>
-                            Tomate
-                        </span>
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ingredientes" value="sal"><span>
-                            Sal
-                        </span>
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ingredientes" value="ovos"><span>
-                            Ovos
-                        </span>
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ingredientes" value="Atum"><span>
-                            Atum
-                        </span>
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ingredientes" value="Queijo"><span>
-                            Queijo
-                        </span>
-                    </label>
+            
+            <form id="formBusca">
+                <div class="container">
+                    <label><input type="checkbox" name="ingredientes" value="arroz"><span>Arroz</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="tomate"><span>Tomate</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="sal"><span>Sal</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="ovos"><span>Ovos</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="atum"><span>Atum</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="queijo"><span>Queijo</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="macarrao"><span>Macarrão</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="alho"><span>Alho</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="azeite"><span>Azeite</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="molho de tomate"><span>Molho de Tomate</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="carne moida"><span>Carne Moída</span></label>
                 </div>
-
+                
                 <div class="busca">
-                    <button type="submit" class="btnEnviar">
-                    Buscar Receitas
-                    </button>
-                    <button type="button" class="btnLimpar" onclick="carregarSugestões()">
-                        Ver sugestões
-                    </button>
+                    <button type="submit" class="btnEnviar">Buscar Receitas</button>
+                    <button type="button" class="btnLimpar" onclick="carregarSugestoes()">Ver sugestões</button>
                 </div>
- 
             </form>
 
-            <div class = "divSecundaria">
-                <h5 class="pequenoTitulo">
-                    FEITAS PARA VOCÊ
-                </h5>
-                <h1 id="tituloResultados" class = "receitaMae">
-                    Receitas que Combinam
-                </h1>
-                <h5 id="subtituloResultados" class="pequenoTituloP2">
-                    Sugestões baseadas em seus ingredientes
-                </h5>
-
-                <div id="exibirReceitas" class = "exibirReceitas">
-                    Carregando receitas do servidor Java. . .
+            <div class="divSecundaria">
+                <h5 class="pequenoTitulo">FEITAS PARA VOCÊ</h5>
+                <h1 class="receitaMae" id="tituloResultados">Receitas que Combinam</h1>
+                <h5 class="pequenoTituloP2" id="subtituloResultados">Todas as receitas disponíveis no sistema</h5>
+                
+                <div class="exibirReceitas" id="exibirReceitas">
+                    Carregando receitas do servidor Java...
                 </div>
-            
             </div>
         </div>
     </div>  
 
-    <!--Script para conectar ao Java sem recarregar a página web-->
-    <script>
-        document.getElementById("formCadastro").addEventListener("submit", function(e){
-            e.preventDefault();
-            const none = document.getElementById("nomeReceita").value;
-            const ingredientes = document.getElementById("ingReceita").value;
+    <!-- POP-UP MODAL: CADASTRO DE RECEITAS (ESCONDIDO) -->
+    <div id="modalReceita" class="modalBackdrop" style="display: none;">
+        <div class="modalBox">
+            <h2>Cadastrar Nova Receita</h2>
+            <form id="formCadastroReceita">
+                <input type="text" id="nomeReceita" placeholder="Nome (Ex: Panqueca de Frango)" required>
+                <input type="text" id="ingReceita" placeholder="Ingredientes (Ex: frango, sal, ovos)" required>
+                <input type="url" id="imgReceita" placeholder="URL da Imagem da internet (Opcional)">
+                <div class="modalAcoes">
+                    <button type="submit" class="btnEnviar">Salvar Receita</button>
+                    <button type="button" class="btnLimpar" onclick="fecharModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            fetch('http://localhost:8080/cadastrar?nome=${encodeURIComponent(nome)}&ingredientes=$ingredientes=${encodeURIComponent(ingredientes)}')
+    <!-- INTEGRAÇÃO COM JAVASCRIPT -->
+    <script>
+        // 1. Enviar Cadastro de Usuário para o Java
+        document.getElementById("formUsuario").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nome = document.getElementById("nomeUser").value;
+            const email = document.getElementById("emailUser").value;
+
+            fetch(`http://localhost:8080/usuario?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}`)
+                .then(res => res.text())
+                .then(msg => {
+                    document.getElementById("boasVindasUser").innerText = `Olá, ${nome}! 👋`;
+                    document.getElementById("telaUsuario").style.display = "none";
+                    document.getElementById("telaApp").style.display = "block";
+                    carregarSugestoes(); // Carrega as sugestões ao logar
+                })
+                .catch(() => alert("Erro ao falar com o Java. O servidor está ativo no VS Code?"));
+        });
+
+        // Funções do Modal de Receita
+        function abrirModal() { document.getElementById("modalReceita").style.display = "flex"; }
+        function fecharModal() { document.getElementById("modalReceita").style.display = "none"; }
+
+        // 2. Enviar Nova Receita para o Java
+        document.getElementById("formCadastroReceita").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nome = document.getElementById("nomeReceita").value;
+            const ingredientes = document.getElementById("ingReceita").value;
+            const imagem = document.getElementById("imgReceita").value;
+
+            fetch(`http://localhost:8080/cadastrar?nome=${encodeURIComponent(nome)}&ingredientes=${encodeURIComponent(ingredientes)}&imagem=${encodeURIComponent(imagem)}`)
                 .then(res => res.text())
                 .then(msg => {
                     alert(msg);
-                    documento.gerElementById("formCadastro").reset();
-                })
-                .catch(() => alert("Erro ao conectar com o servidor Java. Verifique a conexão!"));
+                    fecharModal();
+                    document.getElementById("formCadastroReceita").reset();
+                    carregarSugestoes(); // Atualiza a lista na tela
+                });
         });
 
-        function abrirAplicativo(){
-            document.getElementById("telaCadastro").style.display = "none";
-            document.getElementById("telaApp").style.display = "block";
-            carregarSugestões();
-        }
-
-        <!--Buscador de receitas-->
-        function carregarSugestões(){
-            document.getElementById("tituloResultados").innertext = "Sugestões Cadastradas";
-            document.getElementById("subtituloResultados").innerText = "Todas as receitas disponíveis no sistema";
-            fetch("http://localhost:8080/sugestões")
+        // 3. Buscar todas as receitas (Sugestões)
+        function carregarSugestoes() {
+            document.getElementById("tituloResultados").innerText = "Sugestões Cadastradas";
+            fetch("http://localhost:8080/sugestoes")
                 .then(res => res.text())
-                .then(html => {
-                    document.getElementById("exibirReceitas").innerHTML = html;
-                });
+                .then(html => { document.getElementById("exibirReceitas").innerHTML = html; });
         }
 
-        document.getElementById("formBusca").addEventListener("submit", function(e){
+        // 4. Buscar por ingredientes selecionados
+        document.getElementById("formBusca").addEventListener("submit", function(e) {
             e.preventDefault();
-            const marcados = document.querySelectorAll('input[name="ingredientes"]:checked');
+            const checkboxes = document.querySelectorAll('input[name="ingredientes"]:checked');
             const params = new URLSearchParams();
-
-            marcados.forEach(item => params.append("ingredientes", item.value));
+            checkboxes.forEach(box => params.append("ingredientes", box.value));
 
             document.getElementById("tituloResultados").innerText = "Receitas que Combinam";
-            document.getElementById("SubtitulosResultados").innerText = "Sugestões baseadas nos ingredientes marcados";
-
-            fetch('http://localhost:8080/buscar?${params.toString()}')
+            fetch(`http://localhost:8080/buscar?${params.toString()}`)
                 .then(res => res.text())
-                .then(html => {
-                    document.getElementById("exibirReceitas").innerHTML = html;
-                });
+                .then(html => { document.getElementById("exibirReceitas").innerHTML = html; });
         });
-
     </script>
-
 </body>
 </html>

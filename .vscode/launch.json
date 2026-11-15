@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "OQueTemNaGeladeira",
+            "request": "launch",
+            "mainClass": "OQueTemNaGeladeira",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "assets",
             "request": "launch",
             "mainClass": "assets",
