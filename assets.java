@@ -50,8 +50,8 @@ public class assets {
 
         Receita A2 = new Receita(
             "Macarrão À Bolonhesa",
-            "macarrao.jpg",
-            "250g de macarrão, 2 dentes de alho, 2 colheres de azeite, 1 sachê de molho de tomate, sal a gosto, 300g de carne moída",
+            "macarraobolonhesa.jpg",
+            "500g de macarrão, 2 dentes de alho, 2 colheres de azeite, 1 sachê de molho de tomate, sal a gosto, 500g de carne moída, 1 cebola picada",
             "1. Cozinhe o macarrão em água e sal. 2. Refogue o alho no azeite e frite a carne moída. 3. Adicione o molho de tomate, deixe apurar por 5 minutos e misture ao macarrão."
         );
         A2.addingrediente("macarrao");
@@ -60,11 +60,12 @@ public class assets {
         A2.addingrediente("molho de tomate");
         A2.addingrediente("sal");
         A2.addingrediente("carne moida");
+        A2.addingrediente("cebola");
         livroDeReceitas.add(A2);
 
         Receita A3 = new Receita(
             "Salada de Atum",
-            "atum.jpg",
+            "saladaatum.jpg",
             "1 lata de atum sólido, 2 tomates picados, 1 pitada de sal",
             "1. Escorra o óleo ou água da lata de atum. 2. Misture o atum com os tomates picados em uma tigela. 3. Tempere com sal e sirva gelado."
         );
@@ -73,12 +74,28 @@ public class assets {
         A3.addingrediente("sal");
         livroDeReceitas.add(A3);
 
-        HttpServer servidor = HttpServer.create(new InetSocketAddress(8080), 0);
+        Receita A4 = new Receita(
+            "Fricassê de Frango",
+            "fricasse.jpg",
+            "1 lata de creme de leite, 1 lata de milho verde, 1 copo de requeijão, 100g de azeitona sem caroço, 2 peitos de frango, 200g de mussarela fatiada, 100g de batata palha, 1 xícara de água, sal a gosto",
+            "1. Bata no liquidificador o milho, o requeijão, o creme de leite e a água. 2. Refogue o creme do liquidificador com o frango desfiado, as azeitonas e o sal até ficar com uma textura espessa. 3.Coloque o refogado numa assadeira, cubra com mussarela e espalhe a batata palha por cima. 4.Leve ao forno até borbulhar. 5.Sirva com arroz branco."
+        );
+        A4.addingrediente("frango");
+        A4.addingrediente("cremeleite");
+        A4.addingrediente("sal");
+        A4.addingrediente("requeijao");
+        A4.addingrediente("batata palha");
+        A4.addingrediente("milho verde");
+        A4.addingrediente("azeitona");
+        A4.addingrediente("mussarela");
+        livroDeReceitas.add(A4);
 
-        servidor.createContext("/buscar", new BuscarHandler());
-        servidor.createContext("/sugestoes", new SugestoesHandler());
-        servidor.createContext("/cadastrar", new CadastrarHandler());
-        servidor.createContext("/usuario", new UsuarioHandler());
+        HttpServer servidor = HttpServer.create(new InetSocketAddress(8080), 0);
+        //Criação das funções/rotas do servidor
+        servidor.createContext("/buscar", new BuscarHandler()); //busca de receitas por ingredientes
+        servidor.createContext("/sugestoes", new SugestoesHandler()); //exibição de todas as receitas cadastradas
+        servidor.createContext("/cadastrar", new CadastrarHandler()); //cadastro de nova receita
+        servidor.createContext("/usuario", new UsuarioHandler()); //cadastro de usuário
 
         servidor.setExecutor(null);
         System.out.println("Servidor Java Ativo! Porta 8080 conectada com sucesso.");
@@ -111,7 +128,7 @@ public class assets {
         }
     }
 
-    // Função auxiliar gerar cartão HTML
+    // Função auxiliar para gerar cartão HTML
     static String gerarCardHtml(Receita r, boolean isSucesso) {
         String classeExtra = isSucesso ? " sucesso" : "";
         String icone = isSucesso ? "✅ " : "📖 ";
@@ -123,7 +140,7 @@ public class assets {
                "<div class='boxPreparo'><b>👨‍🍳 Modo de Preparo:</b><br>" + r.modoPreparo + "</div>" +
                "</div>";
     }
-
+    //Cadastro do usuário
     static class UsuarioHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
