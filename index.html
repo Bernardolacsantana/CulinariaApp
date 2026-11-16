@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- TELA 1: CADASTRO DE USUÁRIO (PRIMEIRO ACESSO) -->
+    <!-- Tela de cadastro -->
     <div id="telaUsuario" class="telaInicial">
         <div class="boxCadastro">
             <h1 class="titulo">Direto do Forno</h1>
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <!-- TELA 2: APLICATIVO PRINCIPAL (ESCONDIDO NO INÍCIO) -->
+    <!-- Tela Principal -->
     <div id="telaApp" class="divMae" style="display: none;">
         <div class="cabeçalho">
             <div class="usuarioInfo" id="boasVindasUser"></div>
@@ -37,7 +37,7 @@
                 <!-- Botão para abrir o painel de cadastro de receitas -->
                 <button class="btnNovaReceita" onclick="abrirModal()">+ Cadastrar Nova Receita</button>
             </div>
-            
+            <!--Botões de seleção de ingredientes-->
             <form id="formBusca">
                 <div class="container">
                     <label><input type="checkbox" name="ingredientes" value="arroz"><span>Arroz</span></label>
@@ -71,14 +71,16 @@
         </div>
     </div>  
 
-    <!-- POP-UP MODAL: CADASTRO DE RECEITAS (ESCONDIDO) -->
+        <!-- POP-UP MODAL: CADASTRO COMPLETO DE RECEITAS -->
     <div id="modalReceita" class="modalBackdrop" style="display: none;">
         <div class="modalBox">
             <h2>Cadastrar Nova Receita</h2>
             <form id="formCadastroReceita">
                 <input type="text" id="nomeReceita" placeholder="Nome (Ex: Panqueca de Frango)" required>
-                <input type="text" id="ingReceita" placeholder="Ingredientes (Ex: frango, sal, ovos)" required>
-                <input type="url" id="imgReceita" placeholder="URL da Imagem da internet (Opcional)">
+                <input type="text" id="ingReceita" placeholder="Palavras-chave para busca (Ex: frango, sal, ovos)" required>
+                <input type="text" id="detalhesReceita" placeholder="Quantidades exatas (Ex: 200g de frango, 2 ovos, 1 pitada de sal)" required>
+                <textarea id="preparoReceita" rows="3" placeholder="Modo de preparo (Passo a passo)..." required></textarea>
+                <input type="text" id="imgReceita" placeholder="Nome do arquivo de imagem (Ex: panqueca.jpg) ou URL">
                 <div class="modalAcoes">
                     <button type="submit" class="btnEnviar">Salvar Receita</button>
                     <button type="button" class="btnLimpar" onclick="fecharModal()">Cancelar</button>
@@ -87,47 +89,60 @@
         </div>
     </div>
 
-    <!-- INTEGRAÇÃO COM JAVASCRIPT -->
+
+    //Parte JavaScript
     <script>
-        // 1. Enviar Cadastro de Usuário para o Java
-        document.getElementById("formUsuario").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const nome = document.getElementById("nomeUser").value;
-            const email = document.getElementById("emailUser").value;
+        //Envio de cadastro para o java        const formUsuario = document.getElementById("formUsuario");
+        if (formUsuario) {
+            formUsuario.addEventListener("submit", function(e) {
+                e.preventDefault(); // Impede o navegador de recarregar a página e colocar o "?" na URL
+                
+                const nome = document.getElementById("nomeUser").value;
+                const email = document.getElementById("emailUser").value;
 
-            fetch(`http://localhost:8080/usuario?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}`)
-                .then(res => res.text())
-                .then(msg => {
-                    document.getElementById("boasVindasUser").innerText = `Olá, ${nome}! 👋`;
-                    document.getElementById("telaUsuario").style.display = "none";
-                    document.getElementById("telaApp").style.display = "block";
-                    carregarSugestoes(); // Carrega as sugestões ao logar
-                })
-                .catch(() => alert("Erro ao falar com o Java. O servidor está ativo no VS Code?"));
-        });
+                fetch(`http://localhost:8080/usuario?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}`)
+                    .then(res => res.text())
+                    .then(msg => {
+                        document.getElementById("boasVindasUser").innerText = `Olá, ${nome}! 👋`;
+                        document.getElementById("telaUsuario").style.display = "none";
+                        document.getElementById("telaApp").style.display = "block";
+                        carregarSugestoes();
+                    })
+                    .catch(erro => {
+                        alert("Erro ao falar com o Java! Verifique se o terminal do VS Code está rodando.");
+                    });
+            });
+        }
 
-        // Funções do Modal de Receita
+        //Funções do Modal de Receita
         function abrirModal() { document.getElementById("modalReceita").style.display = "flex"; }
         function fecharModal() { document.getElementById("modalReceita").style.display = "none"; }
 
-        // 2. Enviar Nova Receita para o Java
-        document.getElementById("formCadastroReceita").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const nome = document.getElementById("nomeReceita").value;
-            const ingredientes = document.getElementById("ingReceita").value;
-            const imagem = document.getElementById("imgReceita").value;
+        //Enviar Nova Receita para o Java
+        const formCadastroReceita = document.getElementById("formCadastroReceita");
+        if (formCadastroReceita) {
+            formCadastroReceita.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const nome = document.getElementById("nomeReceita").value;
+                const ingredientes = document.getElementById("ingReceita").value;
+                const detalhes = document.getElementById("detalhesReceita").value;
+                const preparo = document.getElementById("preparoReceita").value;
+                const imagem = document.getElementById("imgReceita").value;
 
-            fetch(`http://localhost:8080/cadastrar?nome=${encodeURIComponent(nome)}&ingredientes=${encodeURIComponent(ingredientes)}&imagem=${encodeURIComponent(imagem)}`)
-                .then(res => res.text())
-                .then(msg => {
-                    alert(msg);
-                    fecharModal();
-                    document.getElementById("formCadastroReceita").reset();
-                    carregarSugestoes(); // Atualiza a lista na tela
-                });
-        });
+                const url = `http://localhost:8080/cadastrar?nome=${encodeURIComponent(nome)}&ingredientes=${encodeURIComponent(ingredientes)}&detalhes=${encodeURIComponent(detalhes)}&preparo=${encodeURIComponent(preparo)}&imagem=${encodeURIComponent(imagem)}`;
 
-        // 3. Buscar todas as receitas (Sugestões)
+                fetch(url)
+                    .then(res => res.text())
+                    .then(msg => {
+                        alert(msg);
+                        fecharModal();
+                        formCadastroReceita.reset();
+                        carregarSugestoes();
+                    });
+            });
+        }
+
+        //Buscar todas as receitas (Sugestões)
         function carregarSugestoes() {
             document.getElementById("tituloResultados").innerText = "Sugestões Cadastradas";
             fetch("http://localhost:8080/sugestoes")
@@ -136,17 +151,20 @@
         }
 
         // 4. Buscar por ingredientes selecionados
-        document.getElementById("formBusca").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const checkboxes = document.querySelectorAll('input[name="ingredientes"]:checked');
-            const params = new URLSearchParams();
-            checkboxes.forEach(box => params.append("ingredientes", box.value));
+        const formBusca = document.getElementById("formBusca");
+        if (formBusca) {
+            formBusca.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const checkboxes = document.querySelectorAll('input[name="ingredientes"]:checked');
+                const params = new URLSearchParams();
+                checkboxes.forEach(box => params.append("ingredientes", box.value));
 
-            document.getElementById("tituloResultados").innerText = "Receitas que Combinam";
-            fetch(`http://localhost:8080/buscar?${params.toString()}`)
-                .then(res => res.text())
-                .then(html => { document.getElementById("exibirReceitas").innerHTML = html; });
-        });
+                document.getElementById("tituloResultados").innerText = "Receitas que Combinam";
+                fetch(`http://localhost:8080/buscar?${params.toString()}`)
+                    .then(res => res.text())
+                    .then(html => { document.getElementById("exibirReceitas").innerHTML = html; });
+            });
+        }
     </script>
 </body>
 </html>
