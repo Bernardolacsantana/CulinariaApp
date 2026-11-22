@@ -49,7 +49,7 @@
                     <label><input type="checkbox" name="ingredientes" value="macarrao"><span>Macarrão 🍝</span></label>
                     <label><input type="checkbox" name="ingredientes" value="alho"><span>Alho 🧄</span></label>
                     <label><input type="checkbox" name="ingredientes" value="azeite"><span>Azeite 🫒</span></label>
-                    <label><input type="checkbox" name="ingredientes" value="molho de tomate"><span>Molho de Tomate 🍅</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="molho de tomate"><span>Molho de Tomate 🥫</span></label>
                     <label><input type="checkbox" name="ingredientes" value="carne moida"><span>Carne Moída 🥩</span></label>
                     <label><input type="checkbox" name="ingredientes" value="cremeleite"><span>Creme de Leite 🥛</span></label>
                     <label><input type="checkbox" name="ingredientes" value="frango"><span>Frango 🍗</span></label>
@@ -63,6 +63,18 @@
                     <label><input type="checkbox" name="ingredientes" value="leite"><span>Leite 🥛</span></label>
                     <label><input type="checkbox" name="ingredientes" value="farinha"><span>Farinha de Trigo 🍞</span></label>
                     <label><input type="checkbox" name="ingredientes" value="requeijao"><span>Requeijão 🥛</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="açucar"><span>Açúcar 🍰</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="leitecondensado"><span>Leite Condensado 🍮</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="camarao"><span>Camarão 🦐</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="pimenta"><span>Pimenta 🌶️</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="maionese"><span>Maionese 🫙</span></label>
+
+                    <label><input type="checkbox" name="ingredientes" value="cenoura"><span>Cenoura 🥕</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="pimentaoverde"><span>Pimentão Verde 🫑
+</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="pimentavermelho"><span>Pimentão Vermelho 🌶️</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="alface"><span>Alface 🥬</span></label>
+                    <label><input type="checkbox" name="ingredientes" value="castanhacaju"><span>Castanha de Caju 🌰</span></label>
                 </div>
                 
                 <div class="busca">
@@ -102,9 +114,9 @@
     </div>
 
 
-    //Parte JavaScript
-    <script>
-        //Envio de cadastro para o java        const formUsuario = document.getElementById("formUsuario");
+    
+    <script> //Parte JavaScript
+        //Envio de cadastro para o java
         if (formUsuario) {
             formUsuario.addEventListener("submit", function(e) {
                 e.preventDefault(); // Impede o navegador de recarregar a página e colocar o "?" na URL

@@ -72,6 +72,13 @@ public class assets {
         A3.addingrediente("atum");
         A3.addingrediente("tomate");
         A3.addingrediente("sal");
+        A3.addingrediente("azeitona");
+        A3.addingrediente("pimentaovermelho");
+        A3.addingrediente("pimentaoverde");
+        A3.addingrediente("maionese");
+        A3.addingrediente("tomate");
+        A3.addingrediente("alface");
+        A3.addingrediente("castanhacaju");
         livroDeReceitas.add(A3);
 
         Receita A4 = new Receita(
