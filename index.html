@@ -121,7 +121,7 @@
                         carregarSugestoes();
                     })
                     .catch(erro => {
-                        alert("Erro ao falar com o Java! Verifique se o terminal do VS Code está rodando.");
+                        alert("Erro ao falar com o Java! Verifique a conex~so com o servidor.");
                     });
             });
         }
@@ -154,7 +154,7 @@
             });
         }
 
-        //Buscar todas as receitas (Sugestões)
+        //Função Sugestões
         function carregarSugestoes() {
             document.getElementById("tituloResultados").innerText = "Sugestões Cadastradas";
             fetch("http://localhost:8080/sugestoes")
@@ -177,6 +177,24 @@
                     .then(html => { document.getElementById("exibirReceitas").innerHTML = html; });
             });
         }
+
+        //Função de busca das receitas
+        function executarBusca(){
+            const checkboxes = document.querySelectorAll('input[name="ingredientes"]:checked');
+            const params = new URLSearchParams();
+            checkboxes.forEach(box => params.append("ingredientes", box.value));
+
+            if(checkboxes.length === 0) {
+                documente.getElementById("tituloResultados").innerText = "Sugestões Cadastradas";
+            }
+            else{
+                document.getElementById("tituloResultados").innerText = "Receitas compativeis (${checkboxes.length} filtro(s))";
+            }
+            fetch(`http://localhost:8080/buscar?${params.toString()}`)
+                .then(res => res.text())
+                .then(html => { document.getElementById("exibirReceitas").innerHTML = html; });
+        }
+    
     </script>
 </body>
 </html>

@@ -195,7 +195,8 @@ public class assets {
                 }
                 livroDeReceitas.add(nova);
                 enviarResposta(exchange, "Receita '" + nomeFormatado + "' cadastrada com sucesso!");
-            } else {
+            }
+            else {
                 enviarResposta(exchange, "Dados incompletos.");
             }
         }
@@ -212,28 +213,41 @@ public class assets {
                 ingredientesUsuario.add(item.toLowerCase());
             }
 
-            StringBuilder html = new StringBuilder();
-            boolean encontrouAlguma = false;
-
-            for (Receita receita : livroDeReceitas) {
-                int encontrados = 0;
-                for (String ing : receita.ingredientesBusca) {
-                    if (ingredientesUsuario.contains(ing)) {
-                        encontrados++;
-                    }
-                }
-
-                if (encontrados == receita.ingredientesBusca.size()) {
-                    html.append(gerarCardHtml(receita, true));
-                    encontrouAlguma = true;
-                }
+        // Se não houver ingredientes fornecidos, exibe todas as receitas
+        if(ingredientesUsuario.isEmpty()){
+            StringBuilder htmlTodas = new StringBuilder();
+            for (Receita v : livroDeReceitas) {
+                htmlTodas.append(gerarCardHtml(v, false));
             }
-
-            if (!encontrouAlguma) {
-                html.append("<p class='avisoVazio'>Nenhuma receita encontrada com esses ingredientes.</p>");
-            }
-
-            enviarResposta(exchange, html.toString());
+            enviarResposta(exchange, htmlTodas.toString());
+            return;
         }
-    }
+
+        StringBuilder html = new StringBuilder();
+        boolean encontrouAlguma = false;
+
+        for(Receita receita : livroDeReceitas) {
+            int encontrados = 0;
+
+            for(String ing: receita.ingredientesBusca){
+                if(ingredientesUsuario.contains(ing)){
+                encontrados++;
+                }
+            }
+        
+
+            if(encontrados > 0){
+                 boolean temTudo = ingredientesUsuario.size() == receita.ingredientesBusca.size();
+                        html.append(gerarCardHtml(receita, temTudo));
+                        encontrouAlguma = true;
+            }
+        }
+        if (!encontrouAlguma) {
+            html.append("<p class='avisoVazio'>Nenhuma receita encontrada com esses ingredientes.</p>");
+        }
+
+        enviarResposta(exchange, html.toString());
+
+        }
+    }   
 }
