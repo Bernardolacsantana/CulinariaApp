@@ -137,6 +137,7 @@ public class assets {
         servidor.start();
     }
 
+    //Processador da lógica do navegador
     static Map<String, List<String>> lerParametros(String query) throws IOException {
         Map<String, List<String>> mapa = new HashMap<>();
         if (query != null) {
@@ -152,6 +153,7 @@ public class assets {
         return mapa;
     }
 
+    // Função para enviar e garantir que o navegador leia e interprete a lógica processada pelo Java
     static void enviarResposta(HttpExchange exchange, String html) throws IOException {
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -164,6 +166,7 @@ public class assets {
     }
 
     // Função auxiliar para gerar cartão HTML
+    //Cria condição para a receita: r=receita, valor booleano.
     static String gerarCardHtml(Receita r, boolean isSucesso) {
         String classeExtra = isSucesso ? " sucesso" : "";
         String icone = isSucesso ? "✅ " : "📖 ";
@@ -190,6 +193,7 @@ public class assets {
         }
     }
 
+    //Função para exibir as sugestões
     static class SugestoesHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -201,22 +205,26 @@ public class assets {
         }
     }
 
+    //Função de cadastro de novas receitas
     static class CadastrarHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             Map<String, List<String>> params = lerParametros(exchange.getRequestURI().getQuery());
             if (params.containsKey("nome") && params.containsKey("ingredientes")) {
-                String nomeBruto = params.get("nome").get(0);
+                String nomeBruto = params.get("nome").get(0); //Nome como o usuário digitou
                 String nomeFormatado = nomeBruto.substring(0, 1).toUpperCase() + nomeBruto.substring(1);
                 
+                //Recebe imagem e adiciona uma padrão caso não seja fornecida
                 String img = params.containsKey("imagem") && !params.get("imagem").get(0).isEmpty() 
                     ? params.get("imagem").get(0) 
                     : "padrao.jpg";
 
+                //Recebe a quantidade de ingredientes
                 String detalhes = params.containsKey("detalhes") && !params.get("detalhes").get(0).isEmpty()
                     ? params.get("detalhes").get(0)
                     : params.get("ingredientes").get(0);
 
+                //Recebe o modo de preparo
                 String preparo = params.containsKey("preparo") && !params.get("preparo").get(0).isEmpty()
                     ? params.get("preparo").get(0)
                     : "Misture os ingredientes e prepare a gosto.";
@@ -229,7 +237,7 @@ public class assets {
                     }
                 }
                 livroDeReceitas.add(nova);
-                enviarResposta(exchange, "Receita '" + nomeFormatado + "' cadastrada com sucesso!");
+                enviarResposta(exchange, "Receita '" + nomeFormatado + "' foi cadastrada com sucesso!");
             }
             else {
                 enviarResposta(exchange, "Dados incompletos.");
@@ -237,15 +245,15 @@ public class assets {
         }
     }
 
+    //Função de busca de receitas por ingredientes
     static class BuscarHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             Map<String, List<String>> params = lerParametros(exchange.getRequestURI().getQuery());
             List<String> ingredientesUsuario = new ArrayList<>();
             
-            // Garante que os ingredientes buscados fiquem em minúsculo
-            for (String item : params.getOrDefault("ingredientes", new ArrayList<>())) {
-                ingredientesUsuario.add(item.toLowerCase());
+                for (String item : params.getOrDefault("ingredientes", new ArrayList<>())) {
+                ingredientesUsuario.add(item.toLowerCase()); // Garante que os ingredientes buscados fiquem em minúsculo
             }
 
         // Se não houver ingredientes fornecidos, exibe todas as receitas
@@ -278,7 +286,7 @@ public class assets {
             }
         }
         if (!encontrouAlguma) {
-            html.append("<p class='avisoVazio'>Nenhuma receita encontrada com esses ingredientes.</p>");
+            html.append("<p class='avisoVazio'>Nenhuma receita encontrada com os ingredientes selecionados, tente outros ingredientes.</p>");
         }
 
         enviarResposta(exchange, html.toString());
