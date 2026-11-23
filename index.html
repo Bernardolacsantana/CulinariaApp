@@ -68,11 +68,10 @@
                     <label><input type="checkbox" name="ingredientes" value="camarao"><span>Camarão 🦐</span></label>
                     <label><input type="checkbox" name="ingredientes" value="pimenta"><span>Pimenta 🌶️</span></label>
                     <label><input type="checkbox" name="ingredientes" value="maionese"><span>Maionese 🫙</span></label>
-
                     <label><input type="checkbox" name="ingredientes" value="cenoura"><span>Cenoura 🥕</span></label>
                     <label><input type="checkbox" name="ingredientes" value="pimentaoverde"><span>Pimentão Verde 🫑
-</span></label>
-                    <label><input type="checkbox" name="ingredientes" value="pimentavermelho"><span>Pimentão Vermelho 🌶️</span></label>
+                    </span></label>
+                    <label><input type="checkbox" name="ingredientes" value="pimentaovermelho"><span>Pimentão Vermelho 🌶️</span></label>
                     <label><input type="checkbox" name="ingredientes" value="alface"><span>Alface 🥬</span></label>
                     <label><input type="checkbox" name="ingredientes" value="castanhacaju"><span>Castanha de Caju 🌰</span></label>
                 </div>
@@ -133,7 +132,7 @@
                         carregarSugestoes();
                     })
                     .catch(erro => {
-                        alert("Erro ao falar com o Java! Verifique a conex~so com o servidor.");
+                        alert("Erro ao comunicar com o servidor! Verifique a conexão.");
                     });
             });
         }
@@ -197,10 +196,10 @@
             checkboxes.forEach(box => params.append("ingredientes", box.value));
 
             if(checkboxes.length === 0) {
-                documente.getElementById("tituloResultados").innerText = "Sugestões Cadastradas";
+                document.getElementById("tituloResultados").innerText = "Sugestões Cadastradas";
             }
             else{
-                document.getElementById("tituloResultados").innerText = "Receitas compativeis (${checkboxes.length} filtro(s))";
+                document.getElementById("tituloResultados").innerText = `Receitas compativeis (${checkboxes.length} filtro(s))`;
             }
             fetch(`http://localhost:8080/buscar?${params.toString()}`)
                 .then(res => res.text())

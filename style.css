@@ -81,7 +81,6 @@ body {
     font-weight: bold;
     font-size: 1.1em;
     background-color: white;
-    display: inline-block;
     float: right;
     padding: 8px 16px;
     border-radius: 20px;
@@ -334,4 +333,11 @@ body {
     color: rgb(2, 32, 10);
     line-height: 1.5;
     border: 1px dashed rgba(2, 32, 10, 0.3);
+}
+
+.avisoVazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #555;
+    padding: 30px;
 }

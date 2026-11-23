@@ -41,7 +41,7 @@ public class assets {
             "Omelete Simples",
             "omelete.jpg",
             "3 ovos, 1 pitada de sal, 50g de queijo ralado",
-            "/n1. Bata os ovos com o sal em uma tigela. 2. Despeje em uma frigideira untada em fogo baixo. 3. Adicione o queijo, dobre ao meio e sirva."
+            "1. Bata os ovos com o sal em uma tigela. 2. Despeje em uma frigideira untada em fogo baixo. 3. Adicione o queijo, dobre ao meio e sirva."
         );
         A1.addingrediente("ovos");
         A1.addingrediente("sal");
@@ -66,8 +66,8 @@ public class assets {
         Receita A3 = new Receita(
             "Salada de Atum",
             "saladaatum.jpg",
-            "1 lata de atum sólido, 2 tomates picados, 1 pitada de sal",
-            "1. Escorra o óleo ou água da lata de atum. 2. Misture o atum com os tomates picados em uma tigela. 3. Tempere com sal e sirva gelado."
+            "1 lata de atum sólido, 2 tomates picados, azeitonas picadas, 1/3 de pimentão vermelho, 1/3 de pimentão verde, 2 colheres de maionese,1 tomate, folhas de alface, 1 pitada de sal, castanhas de caju picadas",
+            "1. Escorra o óleo ou água da lata de atum. 2. Coloque o atum com os tomates picados, os pimentões e as azeitonas em uma tigela, e adicione duas colheres de maionese e misture bem. 3. Tempere com sal a gosto. 4. Em um prato, coloque as folhas de alface e adicione a mistura de atum, por cima salpique as castanhas de caju picadas. 5. Sirva gelado."
         );
         A3.addingrediente("atum");
         A3.addingrediente("tomate");
@@ -76,7 +76,6 @@ public class assets {
         A3.addingrediente("pimentaovermelho");
         A3.addingrediente("pimentaoverde");
         A3.addingrediente("maionese");
-        A3.addingrediente("tomate");
         A3.addingrediente("alface");
         A3.addingrediente("castanhacaju");
         livroDeReceitas.add(A3);
@@ -97,6 +96,35 @@ public class assets {
         A4.addingrediente("mussarela");
         livroDeReceitas.add(A4);
 
+        Receita A5 = new Receita(
+            "Pudim de Leite Condensado",
+            "pudim.jpg",
+            "Pudim: 1 lata de leite condensado, 1 lata de leite (medida da lata de leite condensado), 3 ovos. Calda: 1 xícara de açúcar, 1/2 xícara de água",
+            "1. Para a calda, derreta o açúcar em fogo baixo até formar um caramelo. 2. Adicione a água e cozinhe até dissolver o caramelo. 3. Despeje a calda em uma forma de pudim e reserve. 4. No liquidificador, bata o leite condensado, o leite e os ovos até obter uma mistura homogênea. 5. Despeje a mistura na forma caramelizada. 6. Leve ao forno em banho-maria por aproximadamente 1 hora ou até firmar. 7. Deixe esfriar, desenforme e sirva gelado."
+        );
+        A5.addingrediente("leitecondensado");
+        A5.addingrediente("leite");
+        A5.addingrediente("ovos");
+        A5.addingrediente("açucar");
+        livroDeReceitas.add(A5);
+
+        Receita A6 = new Receita(
+            "Panqueca de Carne Moída",
+            "panqueca.jpg",
+            "1 xícara de farinha de trigo, 1 xícara de leite, 1 ovo, 1 pitada de sal, 500g de carne moída, 1 cebola picada, 2 dentes de alho picados, 1 sachê de molho de tomate, queijo ralado a gosto",
+            "1. Misture a farinha, o leite, o ovo e o sal até formar uma massa homogênea. 2. Cozinhe a massa em uma frigideira untada até dourar dos dois lados. 3. Refogue a carne moída com a cebola e o alho, adicione o molho de tomate e cozinhe por alguns minutos. 4. Recheie as panquecas com a carne moída e enrole-as. 5. Coloque as panquecas em uma assadeira, cubra com queijo ralado e leve ao forno para gratinar."
+        );
+        A6.addingrediente("farinha");
+        A6.addingrediente("leite");
+        A6.addingrediente("ovos");
+        A6.addingrediente("sal");
+        A6.addingrediente("carne moida");
+        A6.addingrediente("cebola");
+        A6.addingrediente("alho");
+        A6.addingrediente("molho de tomate");
+        A6.addingrediente("queijo");
+        livroDeReceitas.add(A6);
+
         HttpServer servidor = HttpServer.create(new InetSocketAddress(8080), 0);
         //Criação das funções/rotas do servidor
         servidor.createContext("/buscar", new BuscarHandler()); //busca de receitas por ingredientes
@@ -113,7 +141,7 @@ public class assets {
         Map<String, List<String>> mapa = new HashMap<>();
         if (query != null) {
             for (String par : query.split("&")) {
-                String[] kv = par.split("=");
+                String[] kv = par.split("=", 2);
                 if (kv.length > 1) {
                     String chave = URLDecoder.decode(kv[0], StandardCharsets.UTF_8.name());
                     String valor = URLDecoder.decode(kv[1], StandardCharsets.UTF_8.name()).trim();
@@ -244,9 +272,9 @@ public class assets {
         
 
             if(encontrados > 0){
-                 boolean temTudo = ingredientesUsuario.size() == receita.ingredientesBusca.size();
-                        html.append(gerarCardHtml(receita, temTudo));
-                        encontrouAlguma = true;
+                boolean temTudo = ingredientesUsuario.containsAll(receita.ingredientesBusca);
+                    html.append(gerarCardHtml(receita, temTudo));
+                    encontrouAlguma = true;
             }
         }
         if (!encontrouAlguma) {
